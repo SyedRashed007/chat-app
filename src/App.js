@@ -5,8 +5,24 @@ import Login from './components/Login'
 import styled from 'styled-components' 
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
+import db from './firebase'
+import { useEffect } from 'react';
 
 function App() {
+
+const getGroups = () => {
+  db.collection('rooms').onSnapshot(snapshot => {
+   snapshot.docs.map((doc) => {
+     console.log(doc.data())
+   })
+  })
+}
+
+useEffect(() => {
+  getGroups();
+}, [])
+
+
   return (
     <div className="App">
       <Router>
