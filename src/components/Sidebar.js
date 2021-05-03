@@ -74,11 +74,12 @@ const ItemContainer = styled.div`
     display: grid;
     height: 40px;
     align-items: center;
+    margin-top: 15px;
     padding-left: 20px;
     cursor: pointer;
     font-size: large;
     :hover{
-        background: #248fc1;
+        background: #088ad2;
     }
 
 `
