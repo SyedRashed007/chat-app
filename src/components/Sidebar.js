@@ -4,7 +4,7 @@ import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import db from '../firebase';
 
-function Sidebar({props , id}) {
+function Sidebar(props) {
 
     const AddGroup = () => {
         const promptName = prompt("Enter a group name")
@@ -14,12 +14,8 @@ function Sidebar({props , id}) {
             })
         }
     }
-    const DeleteGroup = () => {
-            db.collection('rooms').doc(id).delete().then(()=>{
-                console.log("Deleted");
-            }).catch((error)=> {
-                console.log("Error" ,error);
-            })
+    const DeleteGroup = (id) => {
+            db.collection('rooms').doc(id).delete()
     }
 
     return (
@@ -40,7 +36,7 @@ function Sidebar({props , id}) {
                         <ItemContainer>
                             <span>
                                 • {item.name} 
-                                <DeleteForeverTwoToneIcon onClick={DeleteGroup}/>
+                                <DeleteForeverTwoToneIcon onClick={() => DeleteGroup(item.id)}/>
                             </span>
                         </ItemContainer>
                     ))
@@ -80,6 +76,7 @@ const AddGroups = styled.div`
     padding-left: 15px;
     padding-right: 15px;
     font-size: x-large;
+     border-bottom: 1px solid #11a5ec;
 `
 const GroupLogo = styled.div`
     cursor: pointer;
