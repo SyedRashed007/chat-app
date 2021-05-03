@@ -1,9 +1,27 @@
 import React from 'react'
 import styled from 'styled-components'
-import { sidebarItems } from '../data/SidebarName'
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
+import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
+import db from '../firebase';
 
-function Sidebar() {
+function Sidebar({props , id}) {
+
+    const AddGroup = () => {
+        const promptName = prompt("Enter a group name")
+        if(promptName){
+            db.collection('rooms').add({
+                name: promptName
+            })
+        }
+    }
+    const DeleteGroup = () => {
+            db.collection('rooms').doc(id).delete().then(()=>{
+                console.log("Deleted");
+            }).catch((error)=> {
+                console.log("Error" ,error);
+            })
+    }
+
     return (
         <Container>
             <NameContainer>
@@ -14,14 +32,16 @@ function Sidebar() {
             <AddGroups>
                 Add Group
             <GroupLogo>
-                <AddCircleTwoToneIcon/>
+                <AddCircleTwoToneIcon onClick={AddGroup}/>
             </GroupLogo>
             </AddGroups>
                 {
-                    sidebarItems.map(item => (
+                    props.rooms.map(item => (
                         <ItemContainer>
-                            {item.icon}
-                            {item.text}
+                            <span>
+                                • {item.name} 
+                                <DeleteForeverTwoToneIcon onClick={DeleteGroup}/>
+                            </span>
                         </ItemContainer>
                     ))
                 }
@@ -78,8 +98,13 @@ const ItemContainer = styled.div`
     padding-left: 20px;
     cursor: pointer;
     font-size: large;
+    span{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-right: 5px;
+    }
     :hover{
         background: #088ad2;
     }
-
 `

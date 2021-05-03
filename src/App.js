@@ -6,22 +6,25 @@ import styled from 'styled-components'
 import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import db from './firebase'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
 
+  // stores the data
+  const [rooms, setRooms] = useState([])
+
 const getGroups = () => {
   db.collection('rooms').onSnapshot(snapshot => {
-   snapshot.docs.map((doc) => {
-     console.log(doc.data())
-   })
+    setRooms(snapshot.docs.map((doc) => {
+     return { id: doc.id, name: doc.data().name}
+   }))
   })
 }
 
+// runs it once
 useEffect(() => {
   getGroups();
 }, [])
-
 
   return (
     <div className="App">
@@ -29,7 +32,7 @@ useEffect(() => {
         <Container>
           <Header/>
             <Main>
-              <Sidebar/>
+              <Sidebar rooms={rooms}/>
                 <Switch>
                   <Route path='/room'>
                     <Chat/>
