@@ -1,15 +1,15 @@
 import React from 'react'
 import styled from 'styled-components' 
 
-function Header() {
+function Header({user, signOut}) {
     return (
         <Container>
             <UserInformation>
                 <Name>
-                    <h4>Syed Rashed</h4>
+                    <h4>{user.name}</h4>
                 </Name>
-                <UserImage>
-                    <img src="https://i.imgur.com/6VBx3io.png" alt=""/>
+                <UserImage onClick={signOut}>
+                    <img src={user.photo ? user.photo : "https://i.imgur.com/6VBx3io.png"} alt=""/>
                 </UserImage>
             </UserInformation>
         </Container>
