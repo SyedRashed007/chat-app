@@ -7,11 +7,13 @@ import Sidebar from './components/Sidebar'
 import Header from './components/Header'
 import db from './firebase'
 import { useEffect, useState } from 'react';
+import { auth } from './firebase'
 
 function App() {
 
-  // stores the data
+  // stores the data from firebase
   const [rooms, setRooms] = useState([])
+  const [ user, setUser ] = useState(JSON.parse(localStorage.getItem('user'))) 
 
 const getGroups = () => {
   db.collection('rooms').onSnapshot(snapshot => {
@@ -21,6 +23,13 @@ const getGroups = () => {
   })
 }
 
+  const signOut = () => {
+    auth.signOut().then(()=>{
+      localStorage.removeItem('user')
+      setUser(null)
+    })
+  }
+
 // runs it once
 useEffect(() => {
   getGroups();
@@ -29,20 +38,25 @@ useEffect(() => {
   return (
     <div className="App">
       <Router>
-        <Container>
-          <Header/>
-            <Main>
-              <Sidebar rooms={rooms}/>
-                <Switch>
-                  <Route path='/room'>
-                    <Chat/>
-                  </Route>
-                  <Route path='/'>
-                    <Login/>
-                  </Route>
-                </Switch>
-              </Main>
-        </Container>
+      { 
+        !user ?
+        <Login setUser={setUser}/>
+        :
+          <Container>
+            <Header signOut={signOut} user={user}/>
+              <Main>
+                <Sidebar rooms={rooms}/>
+                  <Switch>
+                    <Route path='/room/:groupId'>
+                      <Chat/>
+                    </Route>
+                    <Route path='/'>
+                      Select or Add Group
+                    </Route>
+                  </Switch>
+                </Main>
+          </Container>
+      }
       </Router>
     </div>
   );
