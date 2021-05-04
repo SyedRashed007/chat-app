@@ -1,15 +1,48 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import ChatInput from './ChatInput'
 import ChatMessage from './ChatMessage'
+import db from '../firebase'
+import {useParams} from 'react-router-dom'
+import { useState } from 'react'
 
 function Chat() {
+
+    let {groupId} = useParams();
+    const [ group, setGroup ] = useState();
+    const [ messages, setMessages ] = useState([])
+
+    const getMessages = () => {
+        db.collection('rooms')
+        .doc(groupId)
+        .collection('messages')
+        .orderBy('timestamp', 'desc')
+        .onSnapshot((snapshot)=>{
+            let messages = snapshot.docs.map((doc) => doc.data())
+            console.log(messages)
+            setMessages(messages)
+        })
+    }
+
+    const getGroup = () => {
+        db.collection('rooms')
+        .doc(groupId)
+        .onSnapshot((snapshot)=>{
+            setGroup(snapshot.data());
+        })
+    }
+
+    useEffect(()=>{
+        getGroup();
+        getMessages();
+    }, [groupId])
+
     return (
         <Container>
             <Header>
                 <Group>
                     <GroupName>
-                        • Group Name
+                        • {group && group.name}
                     </GroupName>
                     <GroupInfo>
                         Encryption: Messages are end-to-end encrypted.
@@ -17,7 +50,17 @@ function Chat() {
                 </Group>
             </Header>
             <MessageContainer>
-                <ChatMessage/>
+            {
+                messages.length > 0 &&
+                messages.map((data, index)=>(
+                <ChatMessage
+                    text={data.text}
+                    name={data.name}
+                    image={data.userImage}
+                    timestamp={data.timestamp}
+                />
+                ))
+            }
             </MessageContainer>
             <ChatInput/>
         </Container>
