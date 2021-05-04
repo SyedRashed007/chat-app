@@ -3,8 +3,17 @@ import styled from 'styled-components'
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone';
 import db from '../firebase';
+import { useHistory } from 'react-router-dom'
 
 function Sidebar(props) {
+
+    const History = useHistory();
+
+    const goToGroup = (id) => {
+        if(id){
+            History.push(`/room/${id}`)
+        }
+    }
 
     const AddGroup = () => {
         const promptName = prompt("Enter a group name")
@@ -15,8 +24,9 @@ function Sidebar(props) {
         }
     }
     const DeleteGroup = (id) => {
+            window.confirm(`Do you want to delete the group?`)
             db.collection('rooms').doc(id).delete()
-    }
+        }
 
     return (
         <Container>
@@ -33,7 +43,7 @@ function Sidebar(props) {
             </AddGroups>
                 {
                     props.rooms.map(item => (
-                        <ItemContainer>
+                        <ItemContainer onClick={()=> goToGroup(item.id)}>
                             <span>
                                 • {item.name} 
                                 <DeleteForeverTwoToneIcon onClick={() => DeleteGroup(item.id)}/>
