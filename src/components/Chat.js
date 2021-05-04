@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ChatInput from './ChatInput'
+import ChatMessage from './ChatMessage'
 
 function Chat() {
     return (
@@ -15,7 +16,9 @@ function Chat() {
                     </GroupInfo>
                 </Group>
             </Header>
-            <MessageContainer></MessageContainer>
+            <MessageContainer>
+                <ChatMessage/>
+            </MessageContainer>
             <ChatInput/>
         </Container>
     )
