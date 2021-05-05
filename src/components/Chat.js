@@ -5,10 +5,11 @@ import ChatMessage from './ChatMessage'
 import db from '../firebase'
 import {useParams} from 'react-router-dom'
 import { useState } from 'react'
+import firebase from "firebase"
 
-function Chat() {
+function Chat({user}) {
 
-    let {groupId} = useParams();
+    let { groupId } = useParams();
     const [ group, setGroup ] = useState();
     const [ messages, setMessages ] = useState([])
 
@@ -16,12 +17,23 @@ function Chat() {
         db.collection('rooms')
         .doc(groupId)
         .collection('messages')
-        .orderBy('timestamp', 'desc')
+        .orderBy('timestamp', 'asc')
         .onSnapshot((snapshot)=>{
             let messages = snapshot.docs.map((doc) => doc.data())
-            console.log(messages)
             setMessages(messages)
         })
+    }
+
+    const sendMessage = (text) => {
+        if(groupId){
+            let payload = {
+                text : text,
+                user : user.name,
+                userImage : user.photo,
+                timestamp : firebase.firestore.Timestamp.now()
+            }
+            db.collection('rooms').doc(groupId).collection('messages').add(payload);
+        }
     }
 
     const getGroup = () => {
@@ -62,7 +74,7 @@ function Chat() {
                 ))
             }
             </MessageContainer>
-            <ChatInput/>
+            <ChatInput sendMessage={sendMessage}/>
         </Container>
     )
 }
@@ -94,4 +106,7 @@ const GroupInfo = styled.div`
     margin-top: 8px;
 `
 const MessageContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
 `
