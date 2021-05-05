@@ -47,6 +47,7 @@ function Chat({user}) {
     useEffect(()=>{
         getGroup();
         getMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [groupId])
 
     return (
