@@ -10,7 +10,7 @@ function ChatMessage({ text, name, image, timestamp }) {
             <MessageContent>
                 <Name>
                     {name}
-                    <span>05/04/2021 04:49:59 PM</span>
+                    <span>{new Date(timestamp.toDate()).toTimeString()}</span>
                 </Name>
                 <Text>
                     {text}
