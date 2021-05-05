@@ -48,7 +48,7 @@ useEffect(() => {
                 <Sidebar rooms={rooms}/>
                   <Switch>
                     <Route path='/room/:groupId'>
-                      <Chat/>
+                      <Chat user = {user}/>
                     </Route>
                     <Route path='/'>
                       Select or Add Group
@@ -68,7 +68,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   display: grid;
-  grid-template-rows: 35px auto
+  grid-template-rows: 35px minmax(0, 1fr);
 `
 const Main = styled.div`
   display: grid;
