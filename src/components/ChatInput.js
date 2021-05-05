@@ -1,17 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SendTwoToneIcon from '@material-ui/icons/SendTwoTone';
 import styled from 'styled-components'
 
-function ChatInput() {
+function ChatInput({sendMessage}) {
+
+    const [ input, setInput ] = useState("")
+
+    const send = (e) => {
+        e.preventDefault();
+        if(!input) return
+        sendMessage(input)
+        setInput("")
+    }
+
     return (
         <Container>
             <InputContainer>
                 <form>
-                    <input 
+                    <input
+                        onChange={(e)=> setInput(e.target.value)} 
                         type="text"
+                        value={input}
                         placeholder="Mesaage here..." />
                     <SendButton
-                        type='submit'>
+                        type='submit'
+                        onClick={send}>
                         <SendTwoToneIcon/>
                     </SendButton>
                 </form>
