@@ -1,5 +1,6 @@
 import React from 'react'
-import styled from 'styled-components' 
+import styled from 'styled-components'
+import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone'; 
 
 function Header({user, signOut}) {
     return (
@@ -9,7 +10,7 @@ function Header({user, signOut}) {
                     <h4>{user.name}</h4>
                 </Name>
                 <UserImage onClick={signOut}>
-                    <img src={user.photo ? user.photo : "https://i.imgur.com/6VBx3io.png"} alt=""/>
+                    <ExitToAppTwoToneIcon/>
                 </UserImage>
             </UserInformation>
         </Container>
@@ -34,13 +35,10 @@ const UserInformation = styled.div`
 const Name = styled.div`
     padding-right: 15px;
 `
-const UserImage = styled.div`
-    width: 33px;
-    height: 33px;
+const UserImage = styled.button`
+    width: 35px;
+    height: 35px;
     border-radius: 2px;
     border: 1px solid #97d5f3;
-
-    img {
-        width: 100%
-    }
+    cursor: pointer;
 `
