@@ -31,7 +31,7 @@ function Sidebar(props) {
     return (
         <Container>
             <NameContainer>
-                    <h3>Messaging App</h3>
+                    <h3>Group Chat</h3>
                     <img src="https://img.icons8.com/wired/50/000000/chat.png" alt=""/>
             </NameContainer>
             <MainGroups>
