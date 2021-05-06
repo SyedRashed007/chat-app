@@ -13,18 +13,31 @@ function Chat({user}) {
     const [ group, setGroup ] = useState();
     const [ messages, setMessages ] = useState([])
 
-    const getMessages = () => {
-        db.collection('rooms')
-        .doc(groupId)
-        .collection('messages')
-        .orderBy('timestamp', 'asc')
-        .onSnapshot((snapshot)=>{
-            let messages = snapshot.docs.map((doc) => doc.data())
-            setMessages(messages)
-        })
-    }
-
-    const sendMessage = (text) => {
+    useEffect(()=>{
+        const getMessages = () => {
+            db.collection('rooms')
+            .doc(groupId)
+            .collection('messages')
+            .orderBy('timestamp', 'asc')
+            .onSnapshot((snapshot)=>{
+                let messages = snapshot.docs.map((doc) => doc.data())
+                setMessages(messages)
+            })
+        }
+        
+        const getGroup = () => {
+            db.collection('rooms')
+            .doc(groupId)
+            .onSnapshot((snapshot)=>{
+                setGroup(snapshot.data());
+            })
+        }
+        
+        getGroup();
+        getMessages();  
+    }, [groupId])
+    
+        const sendMessage = (text) => {
         if(groupId){
             let payload = {
                 text : text,
@@ -36,18 +49,7 @@ function Chat({user}) {
         }
     }
 
-    const getGroup = () => {
-        db.collection('rooms')
-        .doc(groupId)
-        .onSnapshot((snapshot)=>{
-            setGroup(snapshot.data());
-        })
-    }
 
-    useEffect(()=>{
-            getGroup();
-            getMessages();  
-    }, [groupId])
 
     return (
         <Container>
